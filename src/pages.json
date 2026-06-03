@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "毕业季",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationBarTextStyle": "black",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    {
+      "path": "pages/packages/packages",
+      "style": {
+        "navigationBarTitleText": "选择套餐",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/schedule/schedule",
+      "style": {
+        "navigationBarTitleText": "选择时间",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/photographer/list",
+      "style": {
+        "navigationBarTitleText": "选择摄影师",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/props/props",
+      "style": {
+        "navigationBarTitleText": "选择道具",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/booking/booking",
+      "style": {
+        "navigationBarTitleText": "确认预约",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationBarTextStyle": "black"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "时光约拍",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#FFFFFF",
+    "backgroundTextStyle": "dark"
+  }
+}

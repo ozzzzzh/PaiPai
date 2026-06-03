@@ -1,0 +1,26 @@
+# 依赖包
+node_modules/
+
+# uni-app 编译输出目录
+unpackage/
+dist/
+build/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+npm-debug.log*
+
+# IDE 配置（可选，如果团队统一可以删掉这行）
+.vscode/
+.idea/
+
+# 本地环境配置（可能包含敏感信息）
+.env.local
+*.local
+
+# 源码映射文件（调试用，非业务代码）
+*.map

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <!-- 移动端关键配置已完善，额外添加以下内容 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="时光约拍">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#fdfaf5">
+  <meta name="format-detection" content="telephone=no">
+  
+  <!-- 添加到主屏时的图标 -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📷</text></svg>">
+  
+  <title>毕业季 · 时光约拍</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  
+  <style>
+    /* 移动端额外优化样式 */
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+    
+    body {
+      background: #f7f3ee;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      /* 防止iOS橡皮筋效果影响体验 */
+      overscroll-behavior: none;
+      /* 安全区域适配 */
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    /* 输入框在iOS上的优化 */
+    input, textarea, select {
+      font-size: 16px !important; /* 防止iOS自动缩放 */
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    
+    /* 自定义滚动条隐藏 */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    /* 平滑滚动 */
+    .snap-x {
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .snap-center {
+      scroll-snap-align: center;
+    }
+    
+    /* 复古边框 */
+    .vintage-border {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1), 0 0 0 2px #f0e7d8, 0 0 0 6px #ffffff, 0 0 0 8px #d9c8ad;
+    }
+    
+    /* 移动端按钮点击反馈 */
+    button:active {
+      opacity: 0.8;
+      transform: scale(0.98);
+    }
+    
+    /* 修复iOS输入框阴影 */
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(176, 137, 104, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div id="vue-floating-action" class="fixed bottom-6 right-5 z-50"></div>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    const GALLERY_IMAGES = [
+      { id: 1, src: "https://picsum.photos/id/1015/400/500", alt: "学士服校园" },
+      { id: 2, src: "https://picsum.photos/id/1043/400/500", alt: "操场欢笑" },
+      { id: 3, src: "https://picsum.photos/id/106/400/500", alt: "图书馆光影" },
+      { id: 4, src: "https://picsum.photos/id/1084/400/500", alt: "林荫道单车" },
+      { id: 5, src: "https://picsum.photos/id/177/400/500", alt: "天台夕阳" },
+      { id: 6, src: "https://picsum.photos/id/319/400/500", alt: "教室黑板" },
+    ];
+
+    const PACKAGES = [
+      { name: "单人毕业照", price: 299, features: ["精修12张", "1套服装", "校园场景", "底片全送"], popular: false },
+      { name: "闺蜜/情侣", price: 499, features: ["精修20张", "2套服装", "双人互动", "道具提供"], popular: true },
+      { name: "宿舍集体", price: 699, features: ["精修30张", "统一服装", "创意合影", "短视频花絮"], popular: false },
+    ];
+
+    const REVIEWS = [
+      { name: "小鹿", text: "摄影师超会引导！原片就很好看，毕业不留遗憾～", avatar: "🦌" },
+      { name: "阿杰", text: "和兄弟们拍得很自然，青春记忆永久保存。", avatar: "🧢" },
+      { name: "雯雯", text: "闺蜜照太有电影感了，朋友圈被赞爆！", avatar: "🌸" },
+    ];
+
+    const App = () => {
+      const [activeTab, setActiveTab] = useState("gallery");
+      const [selectedPackage, setSelectedPackage] = useState(null);
+      const [formData, setFormData] = useState({ name: "", wechat: "", message: "", package: "" });
+      const [submitted, setSubmitted] = useState(false);
+      const galleryRef = useRef(null);
+
+      const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+      };
+
+      const handleBookPackage = (pkg) => {
+        setSelectedPackage(pkg);
+        setFormData(prev => ({ ...prev, package: pkg.name }));
+        setActiveTab("booking");
+        
+        // 移动端滚动到顶部
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.name || !formData.wechat) {
+          alert("请填写姓名和微信号，方便我们联系您～");
+          return;
+        }
+        setSubmitted(true);
+      };
+
+      useEffect(() => {
+        if (activeTab === "gallery" && galleryRef.current) {
+          galleryRef.current.scrollLeft = 0;
+        }
+      }, [activeTab]);
+
+      return (
+        <div className="max-w-md mx-auto bg-[#fdfaf5] min-h-screen relative shadow-2xl overflow-hidden">
+          <header className="sticky top-0 z-40 bg-[#fdfaf5]/90 backdrop-blur-md border-b border-[#e7d7c4] px-4 py-3 flex items-center justify-between safe-top">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">📷</span>
+              <h1 className="text-lg font-bold text-[#5e4b3c] tracking-wide">时光约拍 · 毕业季</h1>
+            </div>
+            <span className="text-xs bg-[#e7d7c4] text-[#5e4b3c] px-3 py-1 rounded-full font-medium">限定档期</span>
+          </header>
+
+          <div className="relative px-4 pt-6 pb-2">
+            <div className="vintage-border rounded-3xl overflow-hidden bg-white/80 p-2 mb-6">
+              <img 
+                src="https://picsum.photos/id/429/400/250" 
+                alt="毕业季主视觉" 
+                className="w-full h-48 object-cover rounded-2xl"
+                loading="eager"
+              />
+              <div className="absolute bottom-6 left-8 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl shadow">
+                <p className="text-xs text-[#b08968] font-semibold tracking-widest">2026 · 青春不散场</p>
+                <p className="text-xl font-bold text-[#4a3828]">毕业约拍计划</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-around px-4 mb-4">
+            {["gallery", "packages", "booking"].map(tab => (
+              <button
+                key={tab}
+                onClick={() => { setActiveTab(tab); setSubmitted(false); }}
+                className={`flex-1 py-3 text-sm font-semibold tracking-wide border-b-2 transition-all duration-300 ${
+                  activeTab === tab 
+                    ? "border-[#b08968] text-[#4a3828] bg-[#f3ede5] rounded-t-xl" 
+                    : "border-transparent text-[#a69480]"
+                }`}
+              >
+                {tab === "gallery" && "🎞️ 作品"}
+                {tab === "packages" && "✨ 套餐"}
+                {tab === "booking" && "📋 预约"}
+              </button>
+            ))}
+          </div>
+
+          <div className="px-4 pb-32">
+            {activeTab === "gallery" && (
+              <div>
+                <h2 className="text-sm font-bold text-[#5e4b3c] mb-3 flex items-center gap-2">
+                  <span>客片故事</span>
+                  <span className="text-xs text-[#b08968]">← 左右滑动 →</span>
+                </h2>
+                <div 
+                  ref={galleryRef}
+                  className="flex gap-4 overflow-x-auto no-scrollbar snap-x pb-4"
+                >
+                  {GALLERY_IMAGES.map(img => (
+                    <div key={img.id} className="snap-center shrink-0 w-40 h-56 rounded-2xl overflow-hidden shadow-md bg-white">
+                      <img src={img.src} alt={img.alt} className="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6">
+                  <h3 className="text-sm font-bold text-[#5e4b3c] mb-3">💬 学长学姐说</h3>
+                  <div className="space-y-3">
+                    {REVIEWS.map((review, idx) => (
+                      <div key={idx} className="bg-white/70 backdrop-blur-sm p-3 rounded-xl border border-[#e7d7c4] flex gap-3 items-start">
+                        <div className="w-8 h-8 rounded-full bg-[#e7d7c4] flex items-center justify-center text-lg">{review.avatar}</div>
+                        <div>
+                          <p className="text-xs font-semibold text-[#4a3828]">{review.name}</p>
+                          <p className="text-xs text-[#6b5b4b] mt-0.5">{review.text}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "packages" && (
+              <div>
+                <h2 className="text-sm font-bold text-[#5e4b3c] mb-3">选择你的专属套餐</h2>
+                <div className="space-y-4">
+                  {PACKAGES.map((pkg, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`relative rounded-2xl p-4 border-2 transition-all ${
+                        pkg.popular 
+                          ? "border-[#b08968] bg-[#f3ede5] shadow-lg" 
+                          : "border-[#e7d7c4] bg-white/80"
+                      }`}
+                    >
+                      {pkg.popular && (
+                        <span className="absolute -top-3 right-4 bg-[#b08968] text-white text-xs px-3 py-1 rounded-full shadow">🔥 热门</span>
+                      )}
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-[#4a3828] text-base">{pkg.name}</h3>
+                        <span className="text-xl font-bold text-[#b08968]">¥{pkg.price}</span>
+                      </div>
+                      <ul className="text-xs text-[#6b5b4b] space-y-1 mb-3">
+                        {pkg.features.map((f, i) => (
+                          <li key={i} className="flex items-center gap-1"><span>✔️</span> {f}</li>
+                        ))}
+                      </ul>
+                      <button 
+                        onClick={() => handleBookPackage(pkg)}
+                        className="w-full py-2.5 bg-[#4a3828] text-white text-sm rounded-xl font-medium active:bg-[#5e4b3c] transition"
+                      >
+                        立即预约此套餐
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === "booking" && (
+              <div>
+                <h2 className="text-sm font-bold text-[#5e4b3c] mb-3">
+                  {selectedPackage ? `预约：${selectedPackage.name}` : "填写信息预约"}
+                </h2>
+                {submitted ? (
+                  <div className="bg-[#e7d7c4]/50 rounded-2xl p-6 text-center border border-[#b08968]">
+                    <p className="text-3xl mb-2">📸</p>
+                    <p className="font-bold text-[#4a3828]">预约成功！</p>
+                    <p className="text-xs text-[#6b5b4b] mt-1">我们会在24小时内通过微信联系你～</p>
+                    <button 
+                      onClick={() => { setSubmitted(false); setFormData({name:"",wechat:"",message:"",package:selectedPackage?.name || ""}); }}
+                      className="mt-4 text-sm text-[#b08968] underline"
+                    >
+                      再次预约
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4 bg-white/70 p-4 rounded-2xl border border-[#e7d7c4]">
+                    <div>
+                      <label className="text-xs font-semibold text-[#5e4b3c]">姓名</label>
+                      <input 
+                        type="text" name="name" value={formData.name} onChange={handleInputChange}
+                        placeholder="你的名字" 
+                        className="w-full mt-1 px-3 py-3 bg-[#fdfaf5] border border-[#d9c8ad] rounded-xl text-sm focus:outline-none focus:border-[#b08968]"
+                        required
+                        autoComplete="name"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-[#5e4b3c]">微信号</label>
+                      <input 
+                        type="text" name="wechat" value={formData.wechat} onChange={handleInputChange}
+                        placeholder="WeChat ID" 
+                        className="w-full mt-1 px-3 py-3 bg-[#fdfaf5] border border-[#d9c8ad] rounded-xl text-sm focus:outline-none focus:border-[#b08968]"
+                        required
+                        autoComplete="username"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-[#5e4b3c]">意向套餐</label>
+                      <select 
+                        name="package" value={formData.package} onChange={handleInputChange}
+                        className="w-full mt-1 px-3 py-3 bg-[#fdfaf5] border border-[#d9c8ad] rounded-xl text-sm focus:outline-none focus:border-[#b08968]"
+                      >
+                        <option value="">请选择</option>
+                        {PACKAGES.map((p, i) => <option key={i} value={p.name}>{p.name} (¥{p.price})</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-[#5e4b3c]">留言/拍摄想法</label>
+                      <textarea 
+                        name="message" value={form.message} onChange={handleInputChange}
+                        placeholder="比如：想拍操场夕阳..." 
+                        rows="3"
+                        className="w-full mt-1 px-3 py-3 bg-[#fdfaf5] border border-[#d9c8ad] rounded-xl text-sm focus:outline-none focus:border-[#b08968] resize-none"
+                      />
+                    </div>
+                    <button 
+                      type="submit"
+                      className="w-full py-3.5 bg-[#b08968] text-white font-bold rounded-xl shadow-md active:bg-[#9b7a5c] transition text-sm"
+                    >
+                      提交预约 · 锁定档期
+                    </button>
+                  </form>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="text-center text-[10px] text-[#cbb295] pb-6 safe-bottom">
+            毕业季约拍 · 留住最好的我们
+          </div>
+        </div>
+      );
+    };
+
+    const rootElement = document.getElementById('root');
+    const reactRoot = ReactDOM.createRoot(rootElement);
+    reactRoot.render(<App />);
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const { createApp, ref } = Vue;
+      
+      const VueFloatingApp = createApp({
+        setup() {
+          const showTooltip = ref(false);
+          const toggleTooltip = () => {
+            showTooltip.value = !showTooltip.value;
+          };
+          return { showTooltip, toggleTooltip };
+        },
+        template: `
+          <div class="flex flex-col items-end gap-2">
+            <transition name="vue-fade">
+              <div v-if="showTooltip" class="bg-white/90 backdrop-blur-md text-xs text-[#4a3828] px-4 py-2.5 rounded-xl shadow-lg border border-[#e7d7c4] mb-1">
+                📞 咨询客服：Graduation2026
+              </div>
+            </transition>
+            <button @click="toggleTooltip" class="w-14 h-14 bg-[#b08968] rounded-full shadow-lg flex items-center justify-center text-white text-2xl active:bg-[#9b7a5c] transition-all duration-300 transform active:scale-95">
+              💬
+            </button>
+          </div>
+        `
+      });
+      
+      VueFloatingApp.mount('#vue-floating-action');
+    });
+  </script>
+
+  <style>
+    .vue-fade-enter-active, .vue-fade-leave-active {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .vue-fade-enter-from, .vue-fade-leave-to {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  </style>
+</body>
+</html>

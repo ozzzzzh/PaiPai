@@ -1,0 +1,49 @@
+/* 极简风格设计变量 */
+
+/* 色彩体系 */
+$color-bg: #FFFFFF;
+$color-bg-secondary: #F8F8F8;
+$color-bg-tertiary: #F0F0F0;
+$color-text: #1A1A1A;
+$color-text-secondary: #999999;
+$color-text-tertiary: #CCCCCC;
+$color-border: #E5E5E5;
+$color-black: #000000;
+
+/* 字体 */
+$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+/* 字号 */
+$font-size-xs: 20rpx;
+$font-size-sm: 24rpx;
+$font-size-base: 28rpx;
+$font-size-lg: 32rpx;
+$font-size-xl: 40rpx;
+$font-size-xxl: 56rpx;
+
+/* 圆角 */
+$radius-sm: 8rpx;
+$radius-md: 16rpx;
+$radius-lg: 24rpx;
+$radius-xl: 32rpx;
+
+/* 间距 */
+$spacing-xs: 16rpx;
+$spacing-sm: 24rpx;
+$spacing-md: 32rpx;
+$spacing-lg: 48rpx;
+$spacing-xl: 64rpx;
+
+/* 行高 */
+$line-height-tight: 1.25;
+$line-height-base: 1.5;
+$line-height-loose: 1.75;
+
+/* 阴影 */
+$shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+$shadow-md: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+
+/* 过渡 */
+$transition-base: all 0.2s ease;
+$transition-slow: all 0.3s ease;
