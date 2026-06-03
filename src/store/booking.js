@@ -10,8 +10,6 @@ const defaultState = {
   fixedDuration: true,
   personCount: 1,
   extraPersonFee: 0,
-  photographerId: null,
-  photographerName: '',
   scheduleDate: '',
   scheduleTime: '',
   scheduleEndTime: '',

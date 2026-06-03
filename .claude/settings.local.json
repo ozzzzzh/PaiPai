@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"d:/freelancer/PaiPai_b/src/static/portfolio\" && cp \"d:/freelancer/PaiPai_b/src/assets/portfolio/\"* \"d:/freelancer/PaiPai_b/src/static/portfolio/\")",
+      "Bash(mkdir -p \"d:/freelancer/PaiPai_b/src/static/portfolio\" && cp \"d:/freelancer/PaiPai_b/assets/portfolio/\"* \"d:/freelancer/PaiPai_b/src/static/portfolio/\" && ls -la \"d:/freelancer/PaiPai_b/src/static/portfolio/\")",
+      "Bash(pnpm dev:mp-weixin)",
+      "Bash(ls -la \"d:/freelancer/PaiPai_b/dist/dev/mp-weixin/static/\")",
+      "WebSearch"
+    ],
+    "additionalDirectories": [
+      "d:\\freelancer\\PaiPai_b\\src\\assets\\portfolio",
+      "d:\\freelancer\\PaiPai_b\\assets\\portfolio"
+    ]
+  }
+}

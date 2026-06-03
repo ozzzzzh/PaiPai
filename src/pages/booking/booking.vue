@@ -36,11 +36,6 @@
         <text class="value">{{ booking.scheduleTime }} - {{ booking.scheduleEndTime }}</text>
       </view>
 
-      <view class="summary-item" v-if="booking.photographerName">
-        <text class="label">摄影师</text>
-        <text class="value">{{ booking.photographerName }}</text>
-      </view>
-
       <view class="summary-item" v-if="booking.props && booking.props.length > 0">
         <text class="label">道具</text>
         <text class="value">{{ booking.props.map(p => p.name).join('、') }}</text>

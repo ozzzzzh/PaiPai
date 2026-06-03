@@ -599,7 +599,7 @@ export default {
         updateBooking('scheduleEndTime', this.selectedEndTimeLabel)
         updateBooking('slotId', res.data.bookingId)
 
-        uni.navigateTo({ url: '/pages/photographer/list' })
+        uni.navigateTo({ url: '/pages/props/props' })
       } catch (e) {
         uni.hideLoading()
         uni.showToast({ title: e.message || '预约失败', icon: 'none' })

@@ -61,8 +61,8 @@ export default {
       entrances: [
         { name: '选择套餐', desc: '单人照、情侣照、集体照', icon: '✦', path: '/pages/packages/packages' },
         { name: '选择时间', desc: '预约拍摄时间段', icon: '⏰', path: '/pages/schedule/schedule' },
-        { name: '选择摄影师', desc: '找到最懂你的拍摄者', icon: '◈', path: '/pages/photographer/list' },
-        { name: '选择道具', desc: '服装、道具、场景', icon: '◇', path: '/pages/props/props' }
+        { name: '选择道具', desc: '服装、道具、场景', icon: '◇', path: '/pages/props/props' },
+        { name: '作品集', desc: '查看精选摄影作品', icon: '❖', path: '/pages/portfolio/portfolio' }
       ]
     }
   },

@@ -5,6 +5,7 @@ node_modules/
 unpackage/
 dist/
 build/
+assets/
 
 # 系统文件
 .DS_Store

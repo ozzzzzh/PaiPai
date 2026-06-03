@@ -26,14 +26,6 @@
       }
     },
     {
-      "path": "pages/photographer/list",
-      "style": {
-        "navigationBarTitleText": "选择摄影师",
-        "navigationBarBackgroundColor": "#FFFFFF",
-        "navigationBarTextStyle": "black"
-      }
-    },
-    {
       "path": "pages/props/props",
       "style": {
         "navigationBarTitleText": "选择道具",
@@ -45,6 +37,14 @@
       "path": "pages/booking/booking",
       "style": {
         "navigationBarTitleText": "确认预约",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/portfolio/portfolio",
+      "style": {
+        "navigationBarTitleText": "作品集",
         "navigationBarBackgroundColor": "#FFFFFF",
         "navigationBarTextStyle": "black"
       }
