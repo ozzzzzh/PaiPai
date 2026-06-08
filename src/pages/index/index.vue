@@ -17,8 +17,8 @@
       <view class="hero-overlay"></view>
       <view class="hero-content">
         <text class="hero-year">2026</text>
-        <text class="hero-title">毕业季</text>
-        <text class="hero-subtitle">青春不散场 · 定格最好时光</text>
+        <text class="hero-title">Aprilie's</text>
+        <text class="hero-subtitle">人生海海 · 常常相逢</text>
       </view>
     </view>
 
@@ -41,7 +41,7 @@
 
     <view class="bottom-section safe-area-bottom">
       <button class="book-btn" @click="startBooking">立即预约</button>
-      <text class="tip">已有 328 位同学预约</text>
+      <text class="tip">@Aprilie</text>
     </view>
   </view>
 </template>
